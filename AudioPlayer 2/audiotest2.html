@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fondamento&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+    integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<style>
+    :root {
+        --circleRotate: 0deg;
+        --circleRotateMax: 90deg;
+        --musicTime: 0s;
+
+    }
+
+    .circle {
+        width: 500px;
+        position: absolute;
+        height: 500px;
+        transform-origin: center;
+        transform: rotateY(180deg) rotateZ(90deg);
+    }
+
+    .audioImageContainer {
+        width: 100%;
+        left: 0;
+        top: 0;
+        height: 100%;
+        background-color: transparent;
+        position: absolute;
+        border-radius: 50%;
+    }
+
+    .audioBtn {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        width: 300px;
+        height: 130px;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        border-radius: 300px 300px 0 0;
+        background-color: #252C36
+    }
+
+    .nextPrevBtn {
+        width: 40px;
+        background-color: #221E22;
+        margin: -15px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: grey;
+        border-radius: 30%;
+        font-size: 30px;
+        border: 7px solid #221E22;
+    }
+
+    #audioBtnPlayPause {
+        background-color: rgb(244, 115, 76);
+        width: 100px;
+        height: 70px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 40%;
+        border: 16px solid #221E22;
+    }
+
+    .audioImage {
+        width: 100%;
+        height: 50%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-repeat: no-repeat !important;
+        border-radius: 50%;
+        background-image: url(adele.jpg);
+        /* baray inke aks khob biyofte in ro tagir bedi */
+        background-position: 50% 50%;
+        background-size: cover;
+        background-color: blue;
+        border-radius: 500px 500px 0 0;
+    }
+
+    .audioContainer {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 530px;
+        height: 530px;
+        z-index: 300;
+        background-color: #252C36;
+        border-radius: 50%;
+        font-family: 'Fondamento', cursive;
+    }
+
+    .circle-wrap {
+        z-index: -2;
+        margin-top: auto;
+        margin: 0 auto;
+        width: 500px;
+        display: flex;
+        position: absolute;
+        height: 500px;
+        background: #fefcff;
+        border-radius: 50%;
+        border: 1px solid var(--musicColor);
+    }
+
+    .circle-wrap .circle .mask,
+    .circle-wrap .circle .fill {
+        width: 500px;
+        height: 500px;
+        position: absolute;
+        border-radius: 50%;
+    }
+
+    .circle-wrap .circle .mask {
+        clip: rect(0px, 500px, 500px, 250px);
+    }
+
+    .circle-wrap .inside-circle {
+        width: 480px;
+        height: 480px;
+        background-repeat: no-repeat !important;
+        border-radius: 50%;
+        background: #252C36;
+        background-position: 50% 50%;
+        background-size: cover;
+        position: absolute;
+        top: 50%;
+        /* position the top  edge of the element at the middle of the parent */
+        left: 50%;
+        /* position the left edge of the element at the middle of the parent */
+        transform: translate(-50%, -50%);
+        /* This is a shorthand of
+                                         translateX(-50%) and translateY(-50%) */
+        z-index: 30 !important;
+    }
+
+    .button-circle {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        z-index: 300;
+        backdrop-filter: blur(5px);
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: auto;
+        transition: 1s;
+        opacity: 0;
+        margin-bottom: auto;
+        text-align: center;
+    }
+
+    .fa-play,
+    .fa-pause {
+        font-size: 50px;
+        color: white;
+        cursor: pointer;
+    }
+
+    .mask .fill {
+        /* nefe chap*/
+        clip: rect(0px, 250px, 500px, 0px);
+        background-color: blue;
+    }
+
+    .animationEffect {
+        animation: fill linear var(--musicTime);
+        animation-play-state: paused;
+        /* bad payan animation in halat ro hefz kone */
+
+    }
+
+    @keyframes fill {
+        0% {
+            transform: rotate(var(--circleRotate));
+        }
+
+        100% {
+            transform: rotate(var(--circleRotateMax));
+        }
+    }
+
+    .running {
+        animation-play-state: running !important;
+    }
+
+    .infoContainer {
+        width: 200px;
+        height: auto;
+        z-index: 300;
+        backdrop-filter: blur(5px);
+        margin-left: auto;
+        margin-right: auto;
+        bottom: 30px;
+        transition: 1s;
+        opacity: 1;
+        display: flex;
+        text-align: center;
+    }
+
+    .infoContainer section {
+        width: 50%;
+        font-size: 20px
+    }
+
+    .inputCont {
+        width: 200px;
+        height: auto;
+        z-index: 300;
+        margin-left: auto;
+        margin-right: auto;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      top: 65%;
+        text-align: center;
+    }
+
+    input[type=range] {
+        width: 200px;
+        z-index: 300;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .titleCont {
+        width: 200px;
+        height: auto;
+        z-index: 300;
+        backdrop-filter: blur(5px);
+        margin-left: auto;
+        margin-right: auto;
+        bottom: 30px;
+        transition: 1s;
+        opacity: 1;
+        display: flex;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+    }
+
+    #TitleShown {
+        text-align: center;
+        font-size: 20px;
+    }
+
+    .audioTime {
+        width: 110px;
+        height: 22px;
+        background-color: #221E22;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        top: 70%;
+        text-align: center;
+        z-index: 100;
+        color: white;
+    }
+
+    .audioTitle {
+        width: 100px;
+        height: 20px;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        top: 80%;
+        text-align: center;
+        z-index: 100;
+        color: white;
+    }
+
+    .audioName {
+        width: 100px;
+        height: 20px;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        top: 84%;
+        text-align: center;
+        z-index: 100;
+        color: white;
+    }
+    .likeButton {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        background-color: transparent;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        width: 50px;
+        height: 50px;
+        transition: 1s;
+        color: white;
+        top: 45%;
+        font-size: 25px;
+        left: 93%;
+    }
+    .audioContainer:hover .likeButton{
+        opacity:1
+    }
+    .likeReactionClass {
+        color: red !important;
+    }
+    .shareButton {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        background-color: transparent;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        width: 50px;
+        height: 50px;
+        transition: 1s;
+        color: white;
+        top: 45%;
+        font-size: 25px;
+        left: 83%;
+    }
+    .audioContainer:hover .shareButton{
+        opacity:1
+    }
+    .shareReactionClass {
+        color: blue;
+    }
+</style>
+
+<body>
+    <audio src="Adele-Cry-Your-Heart-Out-(HipHopKit.com).mp3" id="songPlayer"></audio>
+    <div class="audioContainer">
+        <div class="circle-wrap">
+            <div class="circle ">
+                <div class="mask half">
+                    <div class="fill animationEffect"></div>
+                </div>
+                <div class="mask full animationEffect">
+                    <div class="fill animationEffect"></div>
+                </div>
+            </div>
+            <div class="inside-circle" id="inside-circle"></div>
+            <!-- <div class="button-circle" id="buttonCircle">
+                <a id="play-pause-button" class="fa fa-play"></a>
+            </div> -->
+            <section class="audioTime">
+                <span id="currentTimeSpan">0</span>
+                <span>/</span>
+                <span id="fullTimeSpan">lorem</span>
+            </section>
+            <section class="audioTitle">
+                <span>Adele-Single</span>
+            </section>
+            <section class="audioName">
+                <span>Cry Your Heart Out</span>
+            </section>
+
+        </div>
+        <div class="inputCont">
+            <input type="range" min="0" max="0" id="seekbar">
+        </div>
+        <div class="audioImageContainer">
+            <section class="audioImage"></section>
+            <div class="audioBtn">
+                <section class="nextPrevBtn"><i class="fas fa-fast-backward"></i></section>
+                <section id="audioBtnPlayPause"><a id="play-pause-button" class="fa fa-play"></a></section>
+                <section class="nextPrevBtn"><i class="fas fa-fast-forward"></i></section>
+            </div>
+        </div>
+        <section class="likeButton" onclick="likeReaction()" id="likeBtn"><i class="fa-solid fa-heart"></i></section>
+        <section class="shareButton" onclick="shareReaction()" id="shareBtn"><i class="fas fa-share"></i></section>
+    </div>
+    <!-- <div id="x"></div> -->
+
+    <!-- <button onclick="getCurTime()" type="button">Get current time position</button> -->
+    <script>
+        var audioId = document.getElementById("songPlayer");
+        var seekbar = document.getElementById("seekbar");
+        var fullTimeSpan = document.getElementById("fullTimeSpan");
+        var currentTimeSpan = document.getElementById("currentTimeSpan");
+        var playButton = document.getElementById("buttonCircle");
+        var InsideCircle = document.getElementById("inside-circle");
+        audioId.onloadedmetadata = function () {
+            time = audioId.duration;
+            var musicDuration = time;
+            var minutes = Math.floor(time / 60);
+            var seconds = time - minutes * 60;
+            seconds = Math.floor(seconds);
+            var musicDuration = Math.floor(musicDuration);
+            fullTimeSpan.innerHTML = time
+            var animationElement = document.getElementsByClassName("animationEffect");
+            const musicColor = "red";
+            const musicTimeMin = musicDuration;
+            const musicTime = musicTimeMin;
+            fullTimeSpan.innerHTML = minutes + ':' + seconds;
+            document.documentElement.style.setProperty("--musicColor", musicColor);
+            document.documentElement.style.setProperty("--musicTime", musicTime + 's');
+            $('#play-pause-button').on("click", function () {
+                for (var i = 0; i < animationElement.length; i++) {
+                    // in ba es mishe ke anime run beshe ke 2 bar run mishe
+                    //        animationElement[i].classList.toggle("running");
+                    animationElement[i].style.webkitAnimation = '';
+                }
+                if ($(this).hasClass('fa-play')) {
+                    $(this).removeClass('fa-play');
+                    $(this).addClass('fa-pause');
+                    audioId.play();
+                }
+                else {
+                    $(this).removeClass('fa-pause');
+                    $(this).addClass('fa-play');
+                    audioId.pause();
+                }
+            });
+
+            audioId.onended = function () {
+                $("#play-pause-button").removeClass('fa-pause');
+                $("#play-pause-button").addClass('fa-play');
+                for (var i = 0; i < animationElement.length; i++) {
+                    animationElement[i].classList.toggle("running");
+                    animationElement[i].style.webkitAnimation = 'none';
+                }
+            };
+
+            // Set max value when you know the duration
+            seekbar.max = time;
+            // update audio position
+
+            seekbar.onchange = function () {
+                audioId.currentTime = seekbar.value;
+            }
+            // update range input when currentTime updates
+            audioId.ontimeupdate = function () {
+                seekbar.value = audioId.currentTime;
+                tt = "0";
+                var minutesCurrent =  Math.floor(audioId.currentTime/60);
+                var secondsCurrent = Math.floor(audioId.currentTime - minutesCurrent * 60);
+                if(secondsCurrent < 10){
+                    secondsCurrent = "0" + secondsCurrent;
+                }
+                if(minutesCurrent > 10){
+                    tt="";
+                }
+                currentTimeSpan.innerHTML = tt+minutesCurrent+":"+secondsCurrent;
+                var timeToDeg = (audioId.currentTime / audioId.duration) * 90;
+                document.documentElement.style.setProperty("--circleRotate", timeToDeg + 'deg');
+
+            };
+        };
+        function getCurTime() {
+            alert(getComputedStyle(document.documentElement).getPropertyValue('--circleRote'))
+            alert(audioId.currentTime);
+        }
+        function likeReaction(){
+            document.getElementById("likeBtn").classList.toggle("likeReactionClass")
+        }
+        function shareReaction(){
+            document.getElementById("shareBtn").classList.toggle("shareReactionClass")
+        }
+
+    </script>
+</body>
+
+</html>

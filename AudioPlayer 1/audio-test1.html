@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fondamento&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+    integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<style>
+    :root {
+        --circleRotate: 0deg;
+        --circleRotateMax: 180deg;
+        --musicTime: 0s;
+        --musicSecondColor: grey;
+        --musicColor: white;
+    }
+
+    .container {
+        width: 500px;
+        margin: 0 auto;
+        background-image: linear-gradient(to bottom right, white, var(--musicSecondColor));
+        border-radius: 4%;
+        font-family: 'Fondamento', cursive;
+    }
+
+    .circle-wrap {
+        width: 500px;
+        display: flex;
+        position: relative;
+        height: 500px;
+        background: #fefcff;
+        border-radius: 50%;
+        border: 1px solid var(--musicColor);
+    }
+
+    .circle-wrap .circle .mask,
+    .circle-wrap .circle .fill {
+        width: 500px;
+        height: 500px;
+        position: absolute;
+        border-radius: 50%;
+    }
+
+    .circle-wrap .circle .mask {
+        clip: rect(0px, 500px, 500px, 250px);
+    }
+
+    .circle-wrap .inside-circle {
+        width: 490px;
+        height: 490px;
+        background-repeat: no-repeat !important;
+        border-radius: 50%;
+        background: #9b03ac;
+        background-image: url(adele.jpg);
+        background-position: 50% 50%;
+        background-size: cover;
+        position: absolute;
+        top: 50%;
+        /* position the top  edge of the element at the middle of the parent */
+        left: 50%;
+        /* position the left edge of the element at the middle of the parent */
+        transform: translate(-50%, -50%);
+        /* This is a shorthand of
+                                         translateX(-50%) and translateY(-50%) */
+        z-index: 30 !important;
+    }
+
+    .fa-play,
+    .fa-pause {
+        position: absolute;
+        top: 50%;
+        /* position the top  edge of the element at the middle of the parent */
+        left: 50%;
+        /* position the left edge of the element at the middle of the parent */
+        transform: translate(-50%, -50%);
+        /* This is a shorthand of
+                                         translateX(-50%) and translateY(-50%) */
+        font-size: 40px;
+        color: var(--musicColor);
+        cursor: pointer;
+    }
+
+    .button-circle {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        z-index: 300;
+        backdrop-filter: blur(5px);
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: auto;
+        transition: 1s;
+        opacity: 0;
+        margin-bottom: auto;
+        text-align: center;
+    }
+
+    .button-circle:hover {
+        opacity: 1 !important;
+    }
+
+    .mask .fill {
+        /* nefe chap*/
+        clip: rect(0px, 250px, 500px, 0px);
+        background-color: var(--musicColor);
+    }
+
+    .animationEffect {
+        animation: fill linear var(--musicTime);
+        animation-play-state: paused;
+        /* bad payan animation in halat ro hefz kone */
+
+    }
+
+    @keyframes fill {
+        0% {
+            transform: rotate(var(--circleRotate));
+        }
+
+        100% {
+            transform: rotate(var(--circleRotateMax));
+        }
+    }
+
+    .running {
+        animation-play-state: running !important;
+    }
+
+    .infoContainer {
+        width: 200px;
+        height: auto;
+        z-index: 300;
+        backdrop-filter: blur(5px);
+        margin-left: auto;
+        margin-right: auto;
+        bottom: 30px;
+        transition: 1s;
+        opacity: 1;
+        display: flex;
+        text-align: center;
+    }
+
+    .infoContainer section {
+        width: 50%;
+        font-size: 20px
+    }
+
+    .inputCont {
+        width: 200px;
+        height: auto;
+        z-index: 300;
+        backdrop-filter: blur(5px);
+        margin-left: auto;
+        margin-right: auto;
+        bottom: 30px;
+        transition: 1s;
+        opacity: 1;
+        display: flex;
+        text-align: center;
+    }
+
+    input[type=range] {
+        width: 200px;
+        z-index: 300;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .titleCont {
+        width: 200px;
+        height: auto;
+        z-index: 300;
+        backdrop-filter: blur(5px);
+        margin-left: auto;
+        margin-right: auto;
+        bottom: 30px;
+        transition: 1s;
+        opacity: 1;
+        display: flex;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+    }
+
+    #TitleShown {
+        text-align: center;
+        font-size: 20px;
+    }
+</style>
+
+<body>
+    <audio src="Adele-Cry-Your-Heart-Out-(HipHopKit.com).mp3" id="songPlayer"></audio>
+    <div class="container">
+        <div class="circle-wrap">
+            <div class="circle ">
+                <div class="mask half">
+                    <div class="fill animationEffect"></div>
+                </div>
+                <div class="mask full animationEffect">
+                    <div class="fill animationEffect"></div>
+                </div>
+            </div>
+            <div class="inside-circle" id="inside-circle"></div>
+            <div class="button-circle" id="buttonCircle">
+                <a id="play-pause-button" class="fa fa-play"></a>
+            </div>
+
+        </div>
+        <div class="infoContainer">
+            <section id="TimeShown">felan</section>
+            <section>Adele</section>
+
+        </div>
+        <div class="titleCont">
+            <section id="TitleShown">Cry Your heart Out</section>
+        </div>
+        <div class="inputCont">
+            <input type="range" min="0" max="0" id="seekbar">
+        </div>
+
+    </div>
+    <!-- <div id="x"></div> -->
+
+    <!-- <button onclick="getCurTime()" type="button">Get current time position</button> -->
+    <script>
+        var audioId = document.getElementById("songPlayer");
+        var seekbar = document.getElementById("seekbar");
+        var playButton = document.getElementById("buttonCircle");
+        var InsideCircle = document.getElementById("inside-circle");
+        audioId.onloadedmetadata = function () {
+            time = audioId.duration;
+
+            var musicDuration = time;
+            var minutes = Math.floor(time / 60);
+            var seconds = time - minutes * 60;
+            seconds = Math.floor(seconds);
+            var musicDuration = Math.floor(musicDuration);
+            var TimeShown = document.getElementById("TimeShown");
+            var animationElement = document.getElementsByClassName("animationEffect");
+            const musicColor = "red";
+            const musicTimeMin = musicDuration;
+            const musicTime = musicTimeMin;
+            TimeShown.innerHTML = minutes +'.' +  seconds ;
+            InsideCircle.addEventListener("mouseover", displayButton);
+            InsideCircle.addEventListener("mouseleave", hideButton);
+            document.documentElement.style.setProperty("--musicColor", musicColor);
+            document.documentElement.style.setProperty("--musicTime", musicTime + 's');
+            function displayButton() {
+                playButton.style.opacity = 1;
+            }
+            function hideButton() {
+                playButton.style.opacity = 0;
+            }
+            $('#play-pause-button').on("click", function () {
+                for (var i = 0; i < animationElement.length; i++) {
+                    // in ba es mishe ke anime run beshe ke 2 bar run mishe
+                    //        animationElement[i].classList.toggle("running");
+                    animationElement[i].style.webkitAnimation = '';
+                }
+                if ($(this).hasClass('fa-play')) {
+                    $(this).removeClass('fa-play');
+                    $(this).addClass('fa-pause');
+                    audioId.play();
+                }
+                else {
+                    $(this).removeClass('fa-pause');
+                    $(this).addClass('fa-play');
+                    audioId.pause();
+                }
+            });
+
+            audioId.onended = function () {
+                $("#play-pause-button").removeClass('fa-pause');
+                $("#play-pause-button").addClass('fa-play');
+                for (var i = 0; i < animationElement.length; i++) {
+                    animationElement[i].classList.toggle("running");
+                    animationElement[i].style.webkitAnimation = 'none';
+                }
+            };
+
+            // Set max value when you know the duration
+            seekbar.max = time;
+            // update audio position
+
+            seekbar.onchange = function () {
+                audioId.currentTime = seekbar.value;
+            }
+            // update range input when currentTime updates
+            audioId.ontimeupdate = function () {
+                seekbar.value = audioId.currentTime;
+                var timeToDeg = (audioId.currentTime / time) * 180;
+                document.documentElement.style.setProperty("--circleRotate", timeToDeg + 'deg');
+
+            };
+        };
+        function getCurTime() {
+            alert(getComputedStyle(document.documentElement).getPropertyValue('--circleRote'))
+            alert(audioId.currentTime);
+        }
+
+
+    </script>
+</body>
+
+</html>
